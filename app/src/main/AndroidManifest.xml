@@ -30,6 +30,8 @@
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
+
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
         <activity
@@ -47,6 +49,13 @@
         <activity
             android:name=".activity.SettingsActivity"
             android:screenOrientation="landscape" />
+
+        <activity
+            android:name=".activity.VideoDetailsActivity"
+            android:screenOrientation="landscape" />
+
+        <activity android:name=".activity.SearchActivity"
+            android:screenOrientation="landscape"/>
     </application>
 
 </manifest>

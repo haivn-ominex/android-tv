@@ -10,7 +10,7 @@ import retrofit2.http.Header;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
 
-public interface ApiResponse {
+public interface ApiService {
 
     @GET("/drive/v2/files")
     Call<ListItem> getListFile(@Header("Authorization") String token);

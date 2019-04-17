@@ -22,11 +22,7 @@ import java.util.List;
 public final class MovieList {
     public static final String MOVIE_CATEGORY[] = {
             "Video",
-            "Photo",
-            "Category Two",
-            "Category Three",
-            "Category Four",
-            "Category Five",
+            "Photo"
     };
 
     private static List<Movie> list;
@@ -53,8 +49,6 @@ public final class MovieList {
             bgImageUrl.add(item.getThumbnailLink().replace("220", "480"));
             cardImageUrl.add(item.getThumbnailLink().replace("220", "480"));
         }
-
-
 
         String description = "";
         String studio = "";

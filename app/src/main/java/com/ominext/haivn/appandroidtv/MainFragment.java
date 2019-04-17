@@ -14,7 +14,6 @@
 
 package com.ominext.haivn.appandroidtv;
 
-import android.accounts.Account;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
@@ -49,9 +48,10 @@ import com.google.android.gms.auth.GoogleAuthUtil;
 import com.google.android.gms.auth.UserRecoverableAuthException;
 import com.google.android.gms.common.Scopes;
 import com.ominext.haivn.appandroidtv.activity.PhotoDetailsActivity;
+import com.ominext.haivn.appandroidtv.activity.SearchActivity;
 import com.ominext.haivn.appandroidtv.activity.SettingsActivity;
 import com.ominext.haivn.appandroidtv.api.ApiClient;
-import com.ominext.haivn.appandroidtv.api.ApiResponse;
+import com.ominext.haivn.appandroidtv.api.ApiService;
 import com.ominext.haivn.appandroidtv.model.ListItem;
 import com.ominext.haivn.appandroidtv.model.MyItem;
 import com.ominext.haivn.appandroidtv.model.MyUtils;
@@ -80,7 +80,8 @@ public class MainFragment extends BaseFragment {
     private Timer mBackgroundTimer;
     private String mBackgroundUri;
     private BackgroundManager mBackgroundManager;
-    private List<MyItem> listPhoto, listVideo;
+    public static List<MyItem> listPhoto, listVideo, listData;
+    public static List<Movie> listMovie;
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -89,7 +90,7 @@ public class MainFragment extends BaseFragment {
 
         prepareBackgroundManager();
         setupUIElements();
-        //listFiles("Bearer ya29.GlvtBnwiaroQxM1Kd7CuHSXhNWeEqEKtMYFah-YWZTu55ELyKbmji_GMFmBRFh_dQbrQTsR4fB2j3cIVaUF-o_s6al-h-XBUVRORuVLUubSODYXFVY8mnRfb2gUk");
+        listFiles("Bearer ya29.GlzuBrE_nWifRCjWJpB4JZSrcrbZiMo2t5zk6cbx_gctvsF95v3JdTuBv4JJONjFgDQW2UN2DQ9qwwOhTIHrAIoe7JQIi8vbgFC22Fn7vw6AVJ0pSD1AtPeZxNgXpw");
         setupEventListeners();
     }
 
@@ -105,6 +106,7 @@ public class MainFragment extends BaseFragment {
     private void loadRows() {
         List<Movie> listPhoto = MovieList.setupMovies(this.listPhoto);
         List<Movie> listVideo = MovieList.setupMovies(this.listVideo);
+        listMovie = MovieList.setupMovies(this.listData);
 
         ArrayObjectAdapter rowsAdapter = new ArrayObjectAdapter(new ListRowPresenter());
         CardPresenter cardPresenter = new CardPresenter();
@@ -164,6 +166,9 @@ public class MainFragment extends BaseFragment {
             public void onClick(View view) {
                 Toast.makeText(getActivity(), "Implement your own in-app search", Toast.LENGTH_LONG)
                         .show();
+
+                Intent intent = new Intent(getActivity(), SearchActivity.class);
+                getActivity().startActivity(intent);
             }
         });
 
@@ -199,7 +204,7 @@ public class MainFragment extends BaseFragment {
 
     @Override
     protected void onDriveClientReady() {
-        new MainFragment.RetrieveTokenTask().execute(googleSignInAccount.getEmail());
+       // new MainFragment.RetrieveTokenTask().execute(googleSignInAccount.getEmail());
     }
 
     private class RetrieveTokenTask extends AsyncTask<String, Void, String> {
@@ -233,7 +238,7 @@ public class MainFragment extends BaseFragment {
      * it retrieves results for the first page.
      */
     private void listFiles(String token) {
-        ApiResponse apiService = ApiClient.getClient().create(ApiResponse.class);
+        ApiService apiService = ApiClient.getClient().create(ApiService.class);
 
         Call<ListItem> call = apiService.getListFile(token);
         call.enqueue(new Callback<ListItem>() {
@@ -243,11 +248,14 @@ public class MainFragment extends BaseFragment {
                     List<MyItem> items = response.body().getItems();
                     listPhoto = new ArrayList<>();
                     listVideo = new ArrayList<>();
+                    listData = new ArrayList<>();
                     for (int i = 0; i < items.size(); i++) {
                         if (MyUtils.isPhoto(items.get(i).getTitle())) {
                             listPhoto.add(items.get(i));
+                            listData.add(items.get(i));
                         } else if (MyUtils.isVideo(items.get(i).getTitle())) {
                             listVideo.add(items.get(i));
+                            listData.add(items.get(i));
                         }
                     }
                     loadRows();
@@ -278,10 +286,14 @@ public class MainFragment extends BaseFragment {
                     }
                     intent.putExtra("LIST", (Serializable) listPhoto);
                     getActivity().startActivity(intent);
-                } else if (MyUtils.isVideo(movie.getTitle())){
+                } else if (MyUtils.isVideo(movie.getTitle())) {
                     Intent intent = new Intent(getActivity(), PlaybackActivity.class);
                     intent.putExtra(DetailsActivity.MOVIE, movie);
                     startActivity(intent);
+
+                    /*Intent intent = new Intent(getActivity(), VideoDetailsActivity.class);
+                    intent.putExtra("VIDEO", movie.getVideoUrl());
+                    startActivity(intent);*/
 
                 }
             } else if (item instanceof String) {

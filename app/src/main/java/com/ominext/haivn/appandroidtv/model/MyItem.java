@@ -23,6 +23,17 @@ public class MyItem implements Serializable {
     @SerializedName("alternateLink")
     private String alternateLink;
 
+    @SerializedName("embedLink")
+    private String embedLink;
+
+    public String getEmbedLink() {
+        return embedLink;
+    }
+
+    public void setEmbedLink(String embedLink) {
+        this.embedLink = embedLink;
+    }
+
     public String getAlternateLink() {
         return alternateLink;
     }
