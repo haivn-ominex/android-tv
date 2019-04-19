@@ -90,7 +90,7 @@ public class MainFragment extends BaseFragment {
 
         prepareBackgroundManager();
         setupUIElements();
-        listFiles("Bearer ya29.GlzuBrE_nWifRCjWJpB4JZSrcrbZiMo2t5zk6cbx_gctvsF95v3JdTuBv4JJONjFgDQW2UN2DQ9qwwOhTIHrAIoe7JQIi8vbgFC22Fn7vw6AVJ0pSD1AtPeZxNgXpw");
+        //listFiles("Bearer ya29.GlzuBrE_nWifRCjWJpB4JZSrcrbZiMo2t5zk6cbx_gctvsF95v3JdTuBv4JJONjFgDQW2UN2DQ9qwwOhTIHrAIoe7JQIi8vbgFC22Fn7vw6AVJ0pSD1AtPeZxNgXpw");
         setupEventListeners();
     }
 
@@ -204,7 +204,7 @@ public class MainFragment extends BaseFragment {
 
     @Override
     protected void onDriveClientReady() {
-       // new MainFragment.RetrieveTokenTask().execute(googleSignInAccount.getEmail());
+        new MainFragment.RetrieveTokenTask().execute(googleSignInAccount.getEmail());
     }
 
     private class RetrieveTokenTask extends AsyncTask<String, Void, String> {
@@ -258,7 +258,11 @@ public class MainFragment extends BaseFragment {
                             listData.add(items.get(i));
                         }
                     }
-                    loadRows();
+
+                    Intent intent = new Intent(getActivity(), PhotoDetailsActivity.class);
+                    intent.putExtra("LIST", (Serializable) listData);
+                    getActivity().startActivity(intent);
+                    //loadRows();
                 }
             }
 

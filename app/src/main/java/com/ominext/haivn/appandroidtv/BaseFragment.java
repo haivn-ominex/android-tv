@@ -61,7 +61,7 @@ public abstract class BaseFragment extends BrowseFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //signIn();
+        signIn();
     }
 
     /**
