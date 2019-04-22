@@ -42,12 +42,14 @@ public class PhotoDetailsActivity extends BaseActivity {
 
     Runnable runnable = new Runnable() {
         public void run() {
-            if (adapter.getCount() == page) {
-                page = 0;
-            } else {
-                page++;
+            if (adapter != null) {
+                if (adapter.getCount() == page) {
+                    page = 0;
+                } else {
+                    page++;
+                }
+                viewPager.setCurrentItem(page, true);
             }
-            viewPager.setCurrentItem(page, true);
             handler.postDelayed(this, delay);
         }
     };
